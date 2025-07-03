@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stick Man Animation</title>
+    <style>
+        body { background: #222; margin: 0; }
+        canvas { display: block; margin: 0 auto; background: #fff; }
+        .button-container {
+            position: static;
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="stickman-canvas" width="1200" height="600"></canvas>
+    <div class="button-container">
+        <button id="btn-forward">Forward</button>
+        <button id="btn-backward">Backward</button>
+        <button id="btn-night">Night Mode</button>
+    </div>
+    <script src="sidescroll.js"></script>
+    <script>
+        // Button event listeners for car movement
+        let carMoveInterval = null;
+        function startCarMove(direction) {
+            if (carMoveInterval) return;
+            window.moveCar && window.moveCar(direction);
+            carMoveInterval = setInterval(() => {
+                window.moveCar && window.moveCar(direction);
+            }, 60);
+        }
+        function stopCarMove() {
+            if (carMoveInterval) {
+                clearInterval(carMoveInterval);
+                carMoveInterval = null;
+            }
+        }
+        const btnForward = document.getElementById('btn-forward');
+        const btnBackward = document.getElementById('btn-backward');
+        const btnNight = document.getElementById('btn-night');
+        btnForward.onmousedown = () => startCarMove(1);
+        btnForward.onmouseup = stopCarMove;
+        btnForward.onmouseleave = stopCarMove;
+        btnBackward.onmousedown = () => startCarMove(-1);
+        btnBackward.onmouseup = stopCarMove;
+        btnBackward.onmouseleave = stopCarMove;
+        // For touch devices
+        btnForward.ontouchstart = (e) => { e.preventDefault(); startCarMove(1); };
+        btnForward.ontouchend = stopCarMove;
+        btnBackward.ontouchstart = (e) => { e.preventDefault(); startCarMove(-1); };
+        btnBackward.ontouchend = stopCarMove;
+        btnNight.onclick = function() {
+            window.toggleNight && window.toggleNight();
+        }
+    </script>
+</body>
+</html>
